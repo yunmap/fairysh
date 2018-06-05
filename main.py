@@ -22,8 +22,7 @@ def hello_world():
   response.raise_for_status()
 
   analysis = response.json()
-  print(analysis)
-
+  
   image_caption = analysis["description"]["captions"][0]["text"].capitalize()
 
   return image_caption

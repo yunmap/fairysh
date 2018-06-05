@@ -20,7 +20,8 @@ def hello_world():
   #  image_url = request.form['submit_pic']
   if request.method == 'POST' :
     f = request.files['submit_pic']
-    image_url = f
+    f.save_file('upload_image.png')
+    image_url = 'upload_image.png'
     
   headers  = {'Ocp-Apim-Subscription-Key': subscription_key }
   params   = {'visualFeatures': 'Categories,Description,Color'}

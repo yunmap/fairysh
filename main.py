@@ -16,8 +16,8 @@ def hello_world():
 	# Set image_url to the URL of an image that you want to analyze.
   image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/" + \
 	    "Broadway_and_Times_Square_by_night.jpg/450px-Broadway_and_Times_Square_by_night.jpg"
-  if (request.form['submit_pic'] != 0) :
-    image_url = request.form['submit_pic']
+  #if (request.form['submit_pic'] != 0) :
+  #  image_url = request.form['submit_pic']
 
   headers  = {'Ocp-Apim-Subscription-Key': subscription_key }
   params   = {'visualFeatures': 'Categories,Description,Color'}

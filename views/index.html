@@ -1,0 +1,199 @@
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Azure Face API - Test Page</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<style>
+    :root {
+        --jumbotron-padding-y: 3rem;
+    }
+    .jumbotron {
+        padding-top: var(--jumbotron-padding-y);
+        padding-bottom: var(--jumbotron-padding-y);
+        margin-bottom: 0;
+        background-color: #fff;
+    }
+    @media (min-width: 768px) {
+        .jumbotron {
+            padding-top: calc(var(--jumbotron-padding-y) * 2);
+            padding-bottom: calc(var(--jumbotron-padding-y) * 2);
+        }
+    }
+    .jumbotron p:last-child {
+        margin-bottom: 0;
+    }
+    .jumbotron-heading {
+        font-weight: 300;
+    }
+    .jumbotron .container {
+        max-width: 60rem;
+    }
+    footer {
+        border-top: 1px solid #eee;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+    footer p {
+        margin-bottom: .25rem;
+    }
+    .box-shadow {
+        box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    }
+</style>
+
+</head>
+<body>
+        <script type="text/javascript">
+            function processImage() {
+                // Replace <Subscription Key> with your valid subscription key.
+                var subscriptionKey = "df7a3ffcc7244ca0ab1da2f241f098ef";
+        
+                // NOTE: You must use the same region in your REST call as you used to
+                // obtain your subscription keys. For example, if you obtained your
+                // subscription keys from westus, replace "westcentralus" in the URL
+                // below with "westus".
+                //
+                // Free trial subscription keys are generated in the westcentralus region.
+                // If you use a free trial subscription key, you shouldn't need to change 
+                // this region.
+                var uriBase =
+                    "https://westcentralus.api.cognitive.microsoft.com/face/v1.0/detect";
+        
+                // Request parameters.
+                var params = {
+                    "returnFaceId": "true",
+                    "returnFaceLandmarks": "false",
+                    "returnFaceAttributes":
+                        "age,gender,headPose,smile,facialHair,glasses,emotion," +
+                        "hair,makeup,occlusion,accessories,blur,exposure,noise"
+                };
+        
+                // Display the image.
+                var sourceImageUrl = document.getElementById("inputImage").value;
+                document.querySelector("#sourceImage").src = sourceImageUrl;
+                var html = []
+                // Perform the REST API call.
+                $.ajax({
+                    url: uriBase + "?" + $.param(params),
+                    // Request headers.
+                    beforeSend: function(xhrObj){
+                        xhrObj.setRequestHeader("Content-Type","application/json");
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+                    },
+        
+                    type: "POST",
+        
+                    // Request body.
+                    data: '{"url": ' + '"' + sourceImageUrl + '"}',
+                })
+
+                .done(function(data) {
+                    // Show formatted JSON on webpage.
+                    var memberfilter = new Array();
+                    memberfilter[0] = "faceAttributes"
+                    memberfilter[1] = "age"
+                    $("#responseTextArea").val(JSON.stringify(data, null, 2));
+                    $("#ageTextArea").val(JSON.stringify(data, memberfilter));
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    // Display error message.
+                    var errorString = (errorThrown === "") ?
+                        "Error. " : errorThrown + " (" + jqXHR.status + "): ";
+                    errorString += (jqXHR.responseText === "") ?
+                        "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
+                            jQuery.parseJSON(jqXHR.responseText).message :
+                                jQuery.parseJSON(jqXHR.responseText).error.message;
+                    alert(errorString);
+                });
+            };
+        </script>
+    <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-md-7 py-4">
+                        <h4 class="text-white">About</h4>
+                        <p class="text-muted">MSP 고대팀 화이팅^^</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark box-shadow">
+            <div class="container d-flex justify-content-between">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                    <strong>Azure Face API 연습해보깅</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    
+<main role="main">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">나이 맞추기 테스트</h1>
+            <p class="lead text-muted">사진을 입력해보세요. <a href="https://azure.microsoft.com/ko-kr/services/cognitive-services/face/" target="_blank">Azure Face API</a>를 통해, 사진 속 인물의 나이를 확인해드립니다.<br/>(사진의 url을 입력해주세요.)</p>
+            <p>
+                <br>
+                    <h1 class="lead text-muted"> Image to analyze </h1><br><input type="text" name="inputImage" id="inputImage"
+                    value="http://fimg4.pann.com/new/download.jsp?FileID=43717643" style ="width:920px"/>
+                    <br />
+                    <button class="btn btn-block btn-primary my-2" onclick="processImage()">Analyze face</button><br>
+                    
+                    <div id="wrapper" style="width:900px; display:table;">
+                        <div id="jsonOutput" style="width:600px; display:table-cell;">
+                            <h1 class="lead text-muted">Response:</h1><br><br>
+                    
+                            <textarea id="responseTextArea" class="UIInput"
+                                      style="width:420px; height:400px;"></textarea>
+                            <br>
+                            <textarea id="ageTextArea" class="UIInput"
+                            style="width:420px; height:40px;"></textarea>
+                        </div>
+                        <div id="imageDiv" style="width:420px; display:table-cell;">
+                            <h1 class="lead text-muted">Source image:</h1><br><br>
+                    
+                            <img id="sourceImage" width="400" />
+                        </div>
+                    </div>
+
+            </p>
+            <p class="alert alert-info">
+                본 서비스는 node.js로 만들어졌으며, 마이크로소프트 인공지능 서비스인 <a href="https://azure.microsoft.com/ko-kr/services/cognitive-services/face/" target="_blank">Azure Face API</a>를 사용해서 만들었습니다.<br> 본 프로젝트의 소스코드는 장영이에게서 확인하실 수 있습니다.
+            </p>
+        </div>
+    </section>
+    <br />
+    
+</main>
+
+
+    <footer class="text-muted">
+        <div class="container">
+            <p>
+                &copy; <a href="https://google.com">msp 고대팀</a>.
+                누가 만들었게요?
+            </p>
+        </div>
+    </footer>
+
+    
+<script>
+$(function() {
+    $('form [type=submit]').click(function() {
+        $(this).attr('disabled', true).val('전송 중 ...');
+    });
+});
+</script>
+
+</body>
+</html>

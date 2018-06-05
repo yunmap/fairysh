@@ -1,5 +1,6 @@
 import requests
 from flask import Flask
+from flask import render_template
 
 subscription_key = "b8b0351c901a48798f744ee8713b2595"
 assert subscription_key
@@ -25,7 +26,7 @@ def hello_world():
   
   image_caption = analysis["description"]["captions"][0]["text"].capitalize()
 
-  return image_caption
+  return render_template('index.html', image_caption=image_caption)
 
 if __name__ == '__main__':
   app.run()

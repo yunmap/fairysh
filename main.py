@@ -2,6 +2,9 @@ import requests
 from flask import Flask
 from flask import render_template
 from flask import request
+from PIL import Image
+from io import BytesIO
+import matplotlib.pyplot as plt
 
 subscription_key = "b8b0351c901a48798f744ee8713b2595"
 assert subscription_key
@@ -18,10 +21,6 @@ def hello_world():
 	    "Broadway_and_Times_Square_by_night.jpg/450px-Broadway_and_Times_Square_by_night.jpg"
   #if (request.form['submit_pic'] != 0) :
   #  image_url = request.form['submit_pic']
-  if request.method == 'POST' :
-    f = request.files['submit_pic']
-    f.save_file('upload_image.png')
-    image_url = 'upload_image.png'
     
   headers  = {'Ocp-Apim-Subscription-Key': subscription_key }
   params   = {'visualFeatures': 'Categories,Description,Color'}
@@ -33,7 +32,8 @@ def hello_world():
   
   image_caption = analysis["description"]["captions"][0]["text"].capitalize()
 
-  return render_template('index.html', image_caption=image_caption)
+  return image_url
+  #return render_template('index.html', image_caption=image_caption)
 
 if __name__ == '__main__':
   app.run()

@@ -1,4 +1,5 @@
 import requests
+import os
 from flask import Flask
 from flask import render_template
 from flask import request
@@ -17,12 +18,14 @@ def hello_world():
 	# Set image_url to the URL of an image that you want to analyze.
   image_url = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/" + \
 	    "Broadway_and_Times_Square_by_night.jpg/450px-Broadway_and_Times_Square_by_night.jpg"
-  #if (request.form['submit_pic'] != 0) :
-  #  image_url = request.form['submit_pic']
-    
-  headers  = {'Ocp-Apim-Subscription-Key': subscription_key }
-  params   = {'visualFeatures': 'Categories,Description,Color'}
-  data     = {'url': image_url}
+  os.makedirs(os.path.join(app.instance_path, 'upload'), exist_ok=True)
+  if request.method == 'POST':
+    f = request.form['submit_pic']
+    f.save(os.path.join(app.instance_path, 'upload', 'upload.jpg'))
+    image_url = 'upload/upload.jpg'
+  headers = {'Ocp-Apim-Subscription-Key': subscription_key }
+  params = {'visualFeatures': 'Categories,Description,Color'}
+  data = {'url': image_url}
   response = requests.post(vision_analyze_url, headers=headers, params=params, json=data)
   response.raise_for_status()
 

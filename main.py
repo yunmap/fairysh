@@ -18,7 +18,10 @@ def hello_world():
 	    "Broadway_and_Times_Square_by_night.jpg/450px-Broadway_and_Times_Square_by_night.jpg"
   #if (request.form['submit_pic'] != 0) :
   #  image_url = request.form['submit_pic']
-
+  if request.method == 'POST' :
+    f = request.files['submit_pic']
+    image_url = f
+    
   headers  = {'Ocp-Apim-Subscription-Key': subscription_key }
   params   = {'visualFeatures': 'Categories,Description,Color'}
   data     = {'url': image_url}

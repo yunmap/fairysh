@@ -23,8 +23,8 @@ def hello_world():
 @app.route('/upload', methods=['POST'])
 def upload_file():
   file = request.files['image']
-  
-  f = os.path.join(app.config['UPLOAD_FOLDER'], 'upload.jpg')
+
+  f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)
   file.save(f)
   
@@ -33,7 +33,7 @@ def upload_file():
 
   headers = {'Ocp-Apim-Subscription-Key': subscription_key }
   params = {'visualFeatures': 'Categories,Description,Color'}
-  data = {'url': 'uploads/upload.jpg'}
+  data = {'url': 'uploads/'+file.filename}
   response = requests.post(vision_analyze_url, headers=headers, params=params, json=data)
   response.raise_for_status()
 

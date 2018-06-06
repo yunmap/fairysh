@@ -12,7 +12,6 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = os.path.basename('uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-x=""
 
 @app.route('/')
 def hello_world():

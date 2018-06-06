@@ -10,7 +10,7 @@ assert subscription_key
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = os.path.basename('uploads')
+UPLOAD_FOLDER = os.path.basename('/uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
@@ -32,7 +32,7 @@ def upload_file():
 
   headers = {'Ocp-Apim-Subscription-Key': subscription_key }
   params = {'visualFeatures': 'Categories,Description,Color'}
-  data = {'url': 'uploads/'+file.filename}
+  data = {'url': f}
   response = requests.post(vision_analyze_url, headers=headers, params=params, json=data)
   response.raise_for_status()
 

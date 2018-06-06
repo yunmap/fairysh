@@ -22,7 +22,7 @@ def hello_world():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-  file = request.files['image']
+  file = request.files['images']
 
   f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         # add your custom code to check that the uploaded file is a valid image and not a malicious file (out-of-scope for this post)

@@ -34,7 +34,8 @@ def upload_file():
   headers = {'Ocp-Apim-Subscription-Key': subscription_key }
   params = {'visualFeatures': 'Categories,Description,Color'}
   data = {'url': f}
-  console.log(f)
+  print("ddd", file=sys.stderr)
+  print("ddddd", file=sys.stdout)
   response = requests.post(vision_analyze_url, headers=headers, params=params, json=data)
   response.raise_for_status()
 
